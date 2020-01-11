@@ -1,6 +1,6 @@
-import classIs from 'class-is'
-import { serialize, deserialize } from './../util'
-import { LFCTx } from 'ipld-lfc-tx';
+import classIs from 'class-is';
+import { serialize, deserialize } from './../util';
+import LFCTransactionLink from './../lfc-transaction-link/index';
 
 export default classIs(class LFCNode {
   get _keys() {
@@ -25,7 +25,7 @@ export default classIs(class LFCNode {
   _defineBlock(block) {
     return this._keys.forEach(key => {
       if (key === 'transactions') {
-        block[key] = block[key].map(tx => new LFCTx(tx))
+        block[key] = block[key].map(tx => new LFCTransactionLink(tx))
       }
       Object.defineProperty(this, key, {
         value: block[key],
@@ -46,9 +46,7 @@ export default classIs(class LFCNode {
     return `LFCNode <index: "${this.index.toString()}", prevHash: "${this.prevHash.toString('hex')}", time: "${this.time.toString()}", nonce: "${this.nonce.toString()}", transactions: "${this.transactions.length}", size: ${this.size}>`
   }
   
-  addTransaction(transactions) {
-    if (!Array.isArray(transactions)) transactions = [transactions]
-    
-    transactions.map(tx)
+  get size () {
+    return this.transactions.reduce((p, c) => p + c.size, this.serialize().length)
   }
 }, { className: 'LFCNode', symbolName: '@leofcoin/ipld-lfc/lfc-node'})

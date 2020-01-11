@@ -1,4 +1,5 @@
 import { deserialize } from './util.js';
+import CID from 'cids';
 
 const error = text => {
   const stack = new Error().stack;
@@ -20,7 +21,7 @@ const error = text => {
  *   for further resolving
  *
  */
-export const resolve = (buffer, path) => {
+export const resolve = (buffer, path = '/') => {
   let value = deserialize(buffer)
   
   const parts = path.split('/').filter(Boolean)
@@ -57,7 +58,6 @@ export const traverse = function * (node, path) {
 
 export const tree = function * (buffer) {
   const node = deserialize(buffer)
-
   yield * traverse(node)
 }
 
