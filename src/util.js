@@ -15,7 +15,7 @@ export const serialize = async block => {
       if (!isLink(tx)) {
         tx = new LFCTx(tx)
         const cid = await lfcTxUtil.cid(await tx.serialize())
-        tx = { multihash: cid.toString(), size: tx.size }
+        tx = { multihash: cid.toBaseEncodedString(), size: tx.size }
       }
     _transactions.push(tx)
   }
