@@ -1,13 +1,13 @@
 # ipld-leofcoin
 
-[![Coverage](https://coveralls.io/repos/github/ipld/js-ipld-leofcoin/badge.svg?branch=master)](https://coveralls.io/github/ipld/js-ipld-leofcoin?branch=master)
-[![Travis](https://travis-ci.org/ipld/js-ipld-leofcoin.svg?branch=master)](https://travis-ci.org/ipld/js-ipld-leofcoin)
-[![](https://david-dm.org/ipld/js-ipld-leofcoin.svg?style=flat-square)](https://david-dm.org/ipld/js-ipld-leofcoin)
+[![Coverage](https://coveralls.io/repos/github/leofcoin/ipld-leofcoin/badge.svg?branch=master)](https://coveralls.io/github/leofcoin/ipld-leofcoin?branch=master)
+[![Travis](https://travis-ci.org/leofcoin/ipld-leofcoin.svg?branch=master)](https://travis-ci.org/leofcoin/ipld-leofcoin)
+[![](https://david-dm.org/leofcoin/ipld-leofcoin.svg?style=flat-square)](https://david-dm.org/leofcoin/ipld-leofcoin)
 [![](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 ![](https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square)
 ![](https://img.shields.io/badge/Node.js-%3E%3D6.0.0-orange.svg?style=flat-square)
 
-> JavaScript implementation of the [IPLD format spec](https://github.com/ipld/interface-ipld-format) for Leofcoin.
+> JavaScript implementation of the [IPLD format spec](https://github.com/leofcoin/interface-ipld-format) for Leofcoin.
 
 ## Table of Contents
 
@@ -77,9 +77,9 @@ IpldLeofcoin.util.deserialize(leofcoinBlock, (err, dagNode) => {
 
 ## Contribute
 
-Feel free to join in. All welcome. Open an [issue](https://github.com/ipld/js-ipld-leofcoin/issues)!
+Feel free to join in. All welcome. Open an [issue](https://github.com/leofcoin/ipld-leofcoin/issues)!
 
 ## License
 
-[MIT](LICENSE) © 2018 IPFS
-[MIT](LICENSE) © 2018 Leofcoin
+[MIT](LICENSE) © 2018 IPFS<br>
+[MIT](LICENSE) © 2020 Leofcoin
