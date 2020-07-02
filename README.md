@@ -7,7 +7,7 @@
 ![](https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square)
 ![](https://img.shields.io/badge/Node.js-%3E%3D6.0.0-orange.svg?style=flat-square)
 
-> JavaScript implementation of the [IPLD format spec](https://github.com/leofcoin/interface-ipld-format) for Leofcoin.
+> JavaScript implementation of the [IPLD format spec](https://github.com/ipld/interface-ipld-format) for Leofcoin.
 
 ## Table of Contents
 
