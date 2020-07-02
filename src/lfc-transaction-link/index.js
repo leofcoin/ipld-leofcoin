@@ -1,5 +1,6 @@
 import classIs from 'class-is';
-import { serialize, deserialize } from './../util';
+import { LFCTx, util } from 'ipld-lfc-tx'
+import { isLink } from './util'
 
 export default classIs(class LFCTransactionLink {
   get _keys() {
@@ -7,8 +8,17 @@ export default classIs(class LFCTransactionLink {
   }
   constructor(link) {
     if (link) {
-      this._defineLink(link)
+      (async () => {
+        if (!isLink(link)) {
+          link = new LFCTx(link)
+          const size = link.size
+          const multihash = await util.cid(await link.serialize())
+        }
+        
+        this._defineLink(link)
+      })()
     }
+    
   }
   
   _defineLink(link) {
@@ -18,6 +28,11 @@ export default classIs(class LFCTransactionLink {
         writable: false
       })
     })
+  }
+  
+  isLink(link) {
+    if (link?.multihash && link.size) return true
+    return false
   }
   
   toJSON() {

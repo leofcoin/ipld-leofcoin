@@ -3,12 +3,23 @@ import multicodec from 'multicodec'
 import multihashing from 'multihashing-async'
 import protons from 'protons'
 import proto from './proto.js'
+import { LFCTx, util as lfcTxUtil} from 'ipld-lfc-tx'
+import { isLink } from './lfc-transaction-link/util'
 
 const codec = multicodec.LEOFCOIN_BLOCK
 const defaultHashAlg = multicodec.KECCAK_512
 
-
-export const serialize = block => {
+export const serialize = async block => {
+  const _transactions = []
+  for (let tx of block.transactions) {
+      if (!isLink(tx)) {
+        tx = new LFCTx(tx)
+        const cid = await lfcTxUtil.cid(await tx.serialize())
+        tx = { multihash: cid.toString(), size: tx.size }
+      }
+    _transactions.push(tx)
+  }
+  block.transactions = _transactions
   return protons(proto).LFCBlock.encode(block)
 }
 

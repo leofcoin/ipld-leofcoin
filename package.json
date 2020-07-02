@@ -25,17 +25,17 @@
   },
   "homepage": "https://github.com/leofcoin/ipld-lfc#readme",
   "dependencies": {
-    "cids": "^0.5.8",
+    "cids": "^0.8.3",
     "class-is": "^1.1.0",
-    "ipld-lfc-tx": "^0.1.0",
-    "multicodec": "^1.0.0",
-    "multihashing-async": "^0.8.0",
-    "protons": "^1.1.0"
+    "ipld-lfc-tx": "^0.3.3",
+    "multicodec": "^1.0.3",
+    "multihashing-async": "^1.0.0",
+    "protons": "^1.2.1"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
+    "chai": "^4.2.0",
     "dirty-chai": "^2.0.1",
-    "rollup": "^1.29.0",
-    "tape": "^4.13.0"
+    "rollup": "^2.18.2",
+    "tape": "^4.13.3"
   }
 }

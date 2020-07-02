@@ -6,8 +6,7 @@ export default classIs(class LFCNode {
   get _keys() {
     return ['index', 'prevHash', 'time', 'transactions', 'nonce']
   }
-  constructor(block) {
-    
+  constructor(block) {    
     if (Buffer.isBuffer(block)) {
       this._defineBlock(deserialize(block))
     } else if (block) {

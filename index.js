@@ -6,6 +6,7 @@ var CID = _interopDefault(require('cids'));
 var multicodec = _interopDefault(require('multicodec'));
 var multihashing = _interopDefault(require('multihashing-async'));
 var protons = _interopDefault(require('protons'));
+var ipldLfcTx = require('ipld-lfc-tx');
 var classIs = _interopDefault(require('class-is'));
 
 var proto = `// LFC Block
@@ -23,11 +24,22 @@ message LFCBlock {
   repeated LFCTransactionLink transactions = 5;
 }`;
 
+const isLink = link => Boolean(link?.multihash && link.size);
+
 const codec = multicodec.LEOFCOIN_BLOCK;
 const defaultHashAlg = multicodec.KECCAK_512;
 
-
-const serialize = block => {
+const serialize = async block => {
+  const _transactions = [];
+  for (let tx of block.transactions) {
+      if (!isLink(tx)) {
+        tx = new ipldLfcTx.LFCTx(tx);
+        const cid = await ipldLfcTx.util.cid(await tx.serialize());
+        tx = { multihash: cid.toString(), size: tx.size };
+      }
+    _transactions.push(tx);
+  }
+  block.transactions = _transactions;
   return protons(proto).LFCBlock.encode(block)
 };
 
@@ -114,8 +126,17 @@ var LFCTransactionLink = classIs(class LFCTransactionLink {
   }
   constructor(link) {
     if (link) {
-      this._defineLink(link);
+      (async () => {
+        if (!isLink(link)) {
+          link = new ipldLfcTx.LFCTx(link);
+          const size = link.size;
+          const multihash = await ipldLfcTx.util.cid(await link.serialize());
+        }
+        
+        this._defineLink(link);
+      })();
     }
+    
   }
   
   _defineLink(link) {
@@ -125,6 +146,11 @@ var LFCTransactionLink = classIs(class LFCTransactionLink {
         writable: false
       });
     })
+  }
+  
+  isLink(link) {
+    if (link?.multihash && link.size) return true
+    return false
   }
   
   toJSON() {
@@ -143,8 +169,7 @@ var LFCNode = classIs(class LFCNode {
   get _keys() {
     return ['index', 'prevHash', 'time', 'transactions', 'nonce']
   }
-  constructor(block) {
-    
+  constructor(block) {    
     if (Buffer.isBuffer(block)) {
       this._defineBlock(deserialize(block));
     } else if (block) {
