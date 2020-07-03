@@ -7,30 +7,38 @@ export default classIs(class LFCNode {
     return ['index', 'prevHash', 'time', 'transactions', 'nonce']
   }
   constructor(block) {    
-    if (Buffer.isBuffer(block)) {
-      this._defineBlock(deserialize(block))
-    } else if (block) {
-      this._defineBlock(block)
-    }
+    return (async () => {
+      if (Buffer.isBuffer(block)) {
+        await this._defineBlock(deserialize(block));
+      } else if (block) {
+        await this._defineBlock(block);
+      }
+      
+      return this
+    })()
   }
   
-  serialize() {
+  async serialize() {
     return serialize(this._keys.reduce((p, c) => {
       p[c] = this[c]
       return p
     }, {}))
   }
   
-  _defineBlock(block) {
-    return this._keys.forEach(key => {
+  async _defineBlock(block) {
+    for (var key of this._keys) {
       if (key === 'transactions') {
-        block[key] = block[key].map(tx => new LFCTransactionLink(tx))
-      }
+        const _tx = []
+        for (const tx of block.transactions) {
+          _tx.push(await new LFCTransactionLink(tx))  
+        }
+        block.transactions = await Promise.all(_tx)
+      }      
       Object.defineProperty(this, key, {
         value: block[key],
         writable: false
-      })
-    })
+      });  
+    }
   }
   
   toJSON() {

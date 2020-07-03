@@ -16,7 +16,8 @@ export default classIs(class LFCTransactionLink {
           link = { multihash: cid.toBaseEncodedString(), size }
         }
         
-        this._defineLink(link)
+        await this._defineLink(link)
+        return this
       })()
     }
     
