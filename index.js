@@ -56,7 +56,35 @@ const cid = async buffer => {
 
   return new CID(1, 'leofcoin-block', multihash, 'base58btc')
 };
-var util = { serialize, deserialize, cid, codec, defaultHashAlg };
+
+const validate = json => {
+  if (json.isLFCNode) json = json.toJSON();
+  if (json.prevHash.length !== 94) throw new Error(`Expected: 94 got ${json.prevHash.length} @LFCNode.prevHash.length`)
+  if (typeof json.prevHash !== 'string') throw new Error(`Expected: typeof string got ${typeof json.prevHash} @LFCNode.prevHash`)
+  if (typeof json.hash !== 'string') throw new Error(`Expected: typeof string got ${typeof json.hash} @LFCNode.hash`)
+  if (json.hash.length !== 128) throw new Error(`Expected: 128 got ${json.hash.length} @LFCNode.hash.length`)
+  if (isNaN(json.time)) throw new Error(`Expected: typeof number got ${typeof json.time} @LFCNode.time`)
+  if (isNaN(json.index)) throw new Error(`Expected: typeof number got ${typeof json.index} @LFCNode.index`)
+  if (isNaN(json.nonce)) throw new Error(`Expected: typeof number got ${typeof json.nonce} @LFCNode.nonce`)
+  
+  for (const tx of json.transactions) {
+    try {
+      ipldLfcTx.util.isValid(tx);
+    } catch (e) {
+      throw new Error(`invalid transaction ${e}`)
+    }
+  }
+};
+
+const isValid = data => {
+  try {
+    const valid = validate(data);
+    return true
+  } catch (e) {
+    return false
+  }
+};
+var util = { serialize, deserialize, cid, codec, defaultHashAlg, isValid, validate };
 
 const error = text => {
   const stack = new Error().stack;
@@ -221,6 +249,11 @@ var LFCNode = classIs(class LFCNode {
   get size () {
     return this.transactions.reduce((p, c) => p + c.size, this.serialize().length)
   }
+  
+  isLFCNode() {
+    return true
+  }
+  
 }, { className: 'LFCNode', symbolName: '@leofcoin/ipld-lfc/lfc-node'});
 
 var index = { 

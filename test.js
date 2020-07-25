@@ -4,6 +4,8 @@ const { util, LFCNode, resolver } = require('./index.js');
 const hashBuffer = Buffer.alloc(32)
 const hash = hashBuffer.toString('hex')
 const time = 1593712815480
+const prevHash = Buffer.alloc(47).toString('hex')
+const _hash = Buffer.alloc(64).toString('hex')
 
 const rawTransactions = [{
   id: hash,
@@ -31,10 +33,11 @@ const transactions = [{
 
 const rawBlock = {
   index: 0,
-  prevHash: hash,
+  prevHash,
   time,
   transactions: rawTransactions,
-  nonce: 0
+  nonce: 0,
+  hash: _hash
 }
 
 const block = {
@@ -49,7 +52,7 @@ let serialized;
 let deserialized;
 
 test('can serialize', async tape => {
-  tape.plan(5)
+  tape.plan(6)
   
   let node
   
@@ -72,5 +75,13 @@ test('can serialize', async tape => {
   
   serialized = await util.serialize(rawBlock)
   node = await new LFCNode(serialized)
-  tape.ok(Boolean(serialized.length === 135), 'should serialize raw transactions')
+  tape.ok(Boolean(serialized.length === 165), 'should serialize raw transactions')
+  try {
+    rawBlock.transactions = rawTransactions
+    await util.validate(rawBlock)
+    tape.ok(true, 'should validate')  
+  } catch (e) {
+    console.log(e);
+    tape.ok(false, 'should validate')  
+  }
 })

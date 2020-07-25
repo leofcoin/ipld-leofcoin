@@ -56,4 +56,9 @@ export default classIs(class LFCNode {
   get size () {
     return this.transactions.reduce((p, c) => p + c.size, this.serialize().length)
   }
+  
+  isLFCNode() {
+    return true
+  }
+  
 }, { className: 'LFCNode', symbolName: '@leofcoin/ipld-lfc/lfc-node'})
