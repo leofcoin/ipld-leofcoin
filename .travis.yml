@@ -6,11 +6,12 @@ os:
 language: node_js
 node_js:
 - node
-- 14
 
-script:
-  - npm run c
-  - npm run test
+after_success:
+  - node deploy.js success $WEBHOOK_URL
+  
+after_failure:
+- node deploy.js failure $WEBHOOK_URL
 
 branches:
   only:
