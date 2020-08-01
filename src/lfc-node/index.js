@@ -57,7 +57,7 @@ export default classIs(class LFCNode {
     return this.transactions.reduce((p, c) => p + c.size, this.serialize().length)
   }
   
-  isLFCNode() {
+  get isLFCNode() {
     return true
   }
   

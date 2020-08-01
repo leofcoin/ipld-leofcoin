@@ -52,7 +52,7 @@ let serialized;
 let deserialized;
 
 test('can serialize', async tape => {
-  tape.plan(6)
+  tape.plan(7)
   
   let node
   
@@ -84,4 +84,6 @@ test('can serialize', async tape => {
     console.log(e);
     tape.ok(false, 'should validate')  
   }
+  
+  tape.ok(node.isLFCNode, 'isLFCNode')
 })
