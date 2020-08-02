@@ -73,8 +73,8 @@ test('can serialize', async tape => {
   const tree = await resolver.tree(node.serialize())
   tape.ok(Boolean(node.index === 0), 'should resolve')
   
-  serialized = await util.serialize(rawBlock)
-  node = await new LFCNode(serialized)
+  node = await new LFCNode(rawBlock)
+  serialized = await util.serialize(node.toJSON())
   tape.ok(Boolean(serialized.length === 165), 'should serialize raw transactions')
   try {
     rawBlock.transactions = rawTransactions

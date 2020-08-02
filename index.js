@@ -29,17 +29,7 @@ const isLink = link => Boolean(link?.multihash && link.size);
 const codec = multicodec.LEOFCOIN_BLOCK;
 const defaultHashAlg = multicodec.KECCAK_512;
 
-const serialize = async block => {
-  const _transactions = [];
-  for (let tx of block.transactions) {
-      if (!isLink(tx)) {
-        tx = new ipldLfcTx.LFCTx(tx);
-        const cid = await ipldLfcTx.util.cid(await tx.serialize());
-        tx = { multihash: cid.toBaseEncodedString(), size: tx.size };
-      }
-    _transactions.push(tx);
-  }
-  block.transactions = _transactions;
+const serialize = block => {
   return protons(proto).LFCBlock.encode(block)
 };
 
@@ -158,7 +148,7 @@ var LFCTransactionLink = classIs(class LFCTransactionLink {
         if (!isLink(link)) {
           link = new ipldLfcTx.LFCTx(link);
           const size = link.size;
-          const cid = await ipldLfcTx.util.cid(await link.serialize());
+          const cid = await ipldLfcTx.util.cid(link.serialize());
           link = { multihash: cid.toBaseEncodedString(), size };
         }
         
