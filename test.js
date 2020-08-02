@@ -5,7 +5,7 @@ const hashBuffer = Buffer.alloc(32)
 const hash = hashBuffer.toString('hex')
 const time = 1593712815480
 const prevHash = Buffer.alloc(47).toString('hex')
-const _hash = Buffer.alloc(64).toString('hex')
+const _hash = Buffer.alloc(47).toString('hex')
 
 const rawTransactions = [{
   id: hash,

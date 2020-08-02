@@ -52,7 +52,7 @@ const validate = json => {
   if (json.prevHash.length !== 94) throw new Error(`Expected: 94 got ${json.prevHash.length} @LFCNode.prevHash.length`)
   if (typeof json.prevHash !== 'string') throw new Error(`Expected: typeof string got ${typeof json.prevHash} @LFCNode.prevHash`)
   if (typeof json.hash !== 'string') throw new Error(`Expected: typeof string got ${typeof json.hash} @LFCNode.hash`)
-  if (json.hash.length !== 128) throw new Error(`Expected: 128 got ${json.hash.length} @LFCNode.hash.length`)
+  if (json.hash.length !== 94) throw new Error(`Expected: 94 got ${json.hash.length} @LFCNode.hash.length`)
   if (isNaN(json.time)) throw new Error(`Expected: typeof number got ${typeof json.time} @LFCNode.time`)
   if (isNaN(json.index)) throw new Error(`Expected: typeof number got ${typeof json.index} @LFCNode.index`)
   if (isNaN(json.nonce)) throw new Error(`Expected: typeof number got ${typeof json.nonce} @LFCNode.nonce`)
