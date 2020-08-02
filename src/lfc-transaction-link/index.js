@@ -12,7 +12,7 @@ export default classIs(class LFCTransactionLink {
         if (!isLink(link)) {
           link = new LFCTx(link)
           const size = link.size
-          const cid = await util.cid(await link.serialize())
+          const cid = await util.cid(link.serialize())
           link = { multihash: cid.toBaseEncodedString(), size }
         }
         
