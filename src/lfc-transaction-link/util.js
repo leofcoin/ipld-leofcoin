@@ -1,1 +1,1 @@
-export const isLink = link => Boolean(link?.multihash && link.size)
+export const isLink = link => link ? Boolean(link.multihash && link.size) : false

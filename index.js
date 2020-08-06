@@ -24,7 +24,7 @@ message LFCBlock {
   repeated LFCTransactionLink transactions = 5;
 }`;
 
-const isLink = link => Boolean(link?.multihash && link.size);
+const isLink = link => link ? Boolean(link.multihash && link.size) : false;
 
 const codec = multicodec.LEOFCOIN_BLOCK;
 const defaultHashAlg = multicodec.KECCAK_512;
