@@ -33,7 +33,7 @@ export default classIs(class LFCTransactionLink {
   }
   
   isLink(link) {
-    if (link?.multihash && link.size) return true
+    if (link.multihash && link.size) return true
     return false
   }
   
