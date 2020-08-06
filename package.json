@@ -1,6 +1,6 @@
 {
   "name": "ipld-lfc",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "JavaScript implementation of Leofcoin IPLD formats",
   "main": "index.js",
   "module": "src/index.js",
