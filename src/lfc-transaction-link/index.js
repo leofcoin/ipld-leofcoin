@@ -8,21 +8,17 @@ export default classIs(class LFCTransactionLink {
   }
   constructor(link) {
     if (link) {
-      (async () => {
-        if (!isLink(link)) {
-          link = new LFCTx(link)
-          const size = link.size
-          const cid = await util.cid(link.serialize())
-          link = { multihash: cid.toBaseEncodedString(), size }
-        }
-        
-        await this._defineLink(link)
-        return this
-      })()
+      if (!isLink(link)) {
+        link = new LFCTx(link)
+        const size = link.size
+        const cid = util.cid(link.serialize())
+        link = { multihash: cid.toBaseEncodedString(), size }
+      }
+      this._defineLink(link)
+      return this
     }
-    
   }
-  
+
   _defineLink(link) {
     return this._keys.forEach(key => {
       Object.defineProperty(this, key, {
@@ -31,19 +27,19 @@ export default classIs(class LFCTransactionLink {
       })
     })
   }
-  
+
   isLink(link) {
     if (link.multihash && link.size) return true
     return false
   }
-  
+
   toJSON() {
     return this._keys.reduce((p, c) => {
       p[c] = this[c]
       return p
     }, {})
   }
-  
+
   toString () {
     return `LFCTransactionLink <multihash: "${this.multihash.toString()}", size: "${this.size}">`
   }

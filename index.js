@@ -1,13 +1,19 @@
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var CID = _interopDefault(require('cids'));
-var multicodec = _interopDefault(require('multicodec'));
-var multihashing = _interopDefault(require('multihashing-async'));
-var protons = _interopDefault(require('protons'));
+var CID = require('cids');
+var multicodec = require('multicodec');
+var multihashing = require('multihashing');
+var protons = require('protons');
 var ipldLfcTx = require('ipld-lfc-tx');
-var classIs = _interopDefault(require('class-is'));
+var classIs = require('class-is');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var CID__default = /*#__PURE__*/_interopDefaultLegacy(CID);
+var multicodec__default = /*#__PURE__*/_interopDefaultLegacy(multicodec);
+var multihashing__default = /*#__PURE__*/_interopDefaultLegacy(multihashing);
+var protons__default = /*#__PURE__*/_interopDefaultLegacy(protons);
+var classIs__default = /*#__PURE__*/_interopDefaultLegacy(classIs);
 
 var proto = `// LFC Block
 
@@ -26,25 +32,24 @@ message LFCBlock {
 
 const isLink = link => link ? Boolean(link.multihash && link.size) : false;
 
-const codec = multicodec.LEOFCOIN_BLOCK;
-const defaultHashAlg = multicodec.KECCAK_512;
+const codec = multicodec__default['default'].LEOFCOIN_BLOCK;
+const defaultHashAlg = multicodec__default['default'].KECCAK_512;
 
 const serialize = block => {
-  return protons(proto).LFCBlock.encode(block)
+  return protons__default['default'](proto).LFCBlock.encode(block)
 };
 
 const deserialize = buffer => {
-  return protons(proto).LFCBlock.decode(buffer)
+  return protons__default['default'](proto).LFCBlock.decode(buffer)
 };
 
 /**
  * @returns {Promise.<CID>}
  */
-const cid = async buffer => {
-  const multihash = await multihashing(buffer, defaultHashAlg);
-  const codecName = multicodec.print[codec];
-
-  return new CID(1, 'leofcoin-block', multihash, 'base58btc')
+const cid = buffer => {
+  const multihash = multihashing__default['default'](buffer, defaultHashAlg);
+  multicodec__default['default'].print[codec];
+  return new CID__default['default'](1, 'leofcoin-block', multihash, 'base58btc')
 };
 
 const validate = json => {
@@ -56,7 +61,7 @@ const validate = json => {
   if (isNaN(json.time)) throw new Error(`Expected: typeof number got ${typeof json.time} @LFCNode.time`)
   if (isNaN(json.index)) throw new Error(`Expected: typeof number got ${typeof json.index} @LFCNode.index`)
   if (isNaN(json.nonce)) throw new Error(`Expected: typeof number got ${typeof json.nonce} @LFCNode.nonce`)
-  
+
   for (const tx of json.transactions) {
     try {
       ipldLfcTx.util.isValid(tx);
@@ -106,7 +111,7 @@ const resolve = (buffer, path = '/') => {
     if (value[key] === undefined) throw error(`LFCBlock has no property '${key}'`)
     
     value = value[key];
-    if (CID.isCID(value)) {
+    if (CID__default['default'].isCID(value)) {
       return {
         value,
         remainderPath: parts.join('/')
@@ -120,7 +125,7 @@ const resolve = (buffer, path = '/') => {
 };
 
 const traverse = function * (node, path) {
-  if (Buffer.isBuffer(node) || CID.isCID(node) || typeof node === 'string' ||
+  if (Buffer.isBuffer(node) || CID__default['default'].isCID(node) || typeof node === 'string' ||
       node === null) {
     return
   }
@@ -138,27 +143,23 @@ const tree = function * (buffer) {
 
 var resolver = { resolve, traverse, tree };
 
-var LFCTransactionLink = classIs(class LFCTransactionLink {
+var LFCTransactionLink = classIs__default['default'](class LFCTransactionLink {
   get _keys() {
     return ['multihash', 'size']
   }
   constructor(link) {
     if (link) {
-      (async () => {
-        if (!isLink(link)) {
-          link = new ipldLfcTx.LFCTx(link);
-          const size = link.size;
-          const cid = await ipldLfcTx.util.cid(link.serialize());
-          link = { multihash: cid.toBaseEncodedString(), size };
-        }
-        
-        await this._defineLink(link);
-        return this
-      })();
+      if (!isLink(link)) {
+        link = new ipldLfcTx.LFCTx(link);
+        const size = link.size;
+        const cid = ipldLfcTx.util.cid(link.serialize());
+        link = { multihash: cid.toBaseEncodedString(), size };
+      }
+      this._defineLink(link);
+      return this
     }
-    
   }
-  
+
   _defineLink(link) {
     return this._keys.forEach(key => {
       Object.defineProperty(this, key, {
@@ -167,63 +168,60 @@ var LFCTransactionLink = classIs(class LFCTransactionLink {
       });
     })
   }
-  
+
   isLink(link) {
     if (link.multihash && link.size) return true
     return false
   }
-  
+
   toJSON() {
     return this._keys.reduce((p, c) => {
       p[c] = this[c];
       return p
     }, {})
   }
-  
+
   toString () {
     return `LFCTransactionLink <multihash: "${this.multihash.toString()}", size: "${this.size}">`
   }
 }, { className: 'LFCTransactionLink', symbolName: '@leofcoin/ipld-lfc/lfc-transaction-link'});
 
-var LFCNode = classIs(class LFCNode {
+var LFCNode = classIs__default['default'](class LFCNode {
   get _keys() {
     return ['index', 'prevHash', 'time', 'transactions', 'nonce']
   }
-  constructor(block) {    
-    return (async () => {
-      if (Buffer.isBuffer(block)) {
-        await this._defineBlock(deserialize(block));
-      } else if (block) {
-        await this._defineBlock(block);
-      }
-      
-      return this
-    })()
+  constructor(block) {
+    if (Buffer.isBuffer(block)) {
+      this._defineBlock(deserialize(block));
+    } else if (block) {
+      this._defineBlock(block);
+    }
+    return this
   }
-  
-  async serialize() {
+
+  serialize() {
     return serialize(this._keys.reduce((p, c) => {
       p[c] = this[c];
       return p
     }, {}))
   }
-  
-  async _defineBlock(block) {
+
+  _defineBlock(block) {
     for (var key of this._keys) {
       if (key === 'transactions') {
         const _tx = [];
         for (const tx of block.transactions) {
-          _tx.push(await new LFCTransactionLink(tx));  
+          _tx.push(new LFCTransactionLink(tx));
         }
-        block.transactions = await Promise.all(_tx);
-      }      
+        block.transactions = _tx;
+      }
       Object.defineProperty(this, key, {
         value: block[key],
         writable: false
-      });  
+      });
     }
   }
-  
+
   toJSON() {
     return this._keys.reduce((p, c) => {
       if (c === 'transactions') p[c] = this[c].map(tx => tx.toJSON());
@@ -231,19 +229,19 @@ var LFCNode = classIs(class LFCNode {
       return p
     }, {})
   }
-  
+
   toString () {
     return `LFCNode <index: "${this.index.toString()}", prevHash: "${this.prevHash.toString('hex')}", time: "${this.time.toString()}", nonce: "${this.nonce.toString()}", transactions: "${this.transactions.length}", size: ${this.size}>`
   }
-  
+
   get size () {
     return this.transactions.reduce((p, c) => p + c.size, this.serialize().length)
   }
-  
+
   get isLFCNode() {
     return true
   }
-  
+
 }, { className: 'LFCNode', symbolName: '@leofcoin/ipld-lfc/lfc-node'});
 
 var index = { 

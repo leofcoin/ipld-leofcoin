@@ -28,15 +28,15 @@
   "dependencies": {
     "cids": "^0.8.3",
     "class-is": "^1.1.0",
-    "ipld-lfc-tx": "^0.4.0",
+    "ipld-lfc-tx": "^0.5.3",
     "multicodec": "^1.0.4",
-    "multihashing-async": "^1.0.0",
+    "multihashing": "^0.3.3",
     "protons": "^1.2.1"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.4",
     "dirty-chai": "^2.0.1",
-    "rollup": "^2.23.0",
-    "tape": "^4.13.3"
+    "rollup": "^2.55.1",
+    "tape": "^4.14.0"
   }
 }

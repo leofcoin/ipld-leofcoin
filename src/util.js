@@ -1,6 +1,6 @@
 import CID from 'cids'
 import multicodec from 'multicodec'
-import multihashing from 'multihashing-async'
+import multihashing from 'multihashing'
 import protons from 'protons'
 import proto from './proto.js'
 import { LFCTx, util as lfcTxUtil} from 'ipld-lfc-tx'
@@ -20,10 +20,9 @@ export const deserialize = buffer => {
 /**
  * @returns {Promise.<CID>}
  */
-export const cid = async buffer => {
-  const multihash = await multihashing(buffer, defaultHashAlg)
+export const cid = buffer => {
+  const multihash = multihashing(buffer, defaultHashAlg)
   const codecName = multicodec.print[codec]
-
   return new CID(1, 'leofcoin-block', multihash, 'base58btc')
 }
 
@@ -36,7 +35,7 @@ export const validate = json => {
   if (isNaN(json.time)) throw new Error(`Expected: typeof number got ${typeof json.time} @LFCNode.time`)
   if (isNaN(json.index)) throw new Error(`Expected: typeof number got ${typeof json.index} @LFCNode.index`)
   if (isNaN(json.nonce)) throw new Error(`Expected: typeof number got ${typeof json.nonce} @LFCNode.nonce`)
-  
+
   for (const tx of json.transactions) {
     try {
       lfcTxUtil.isValid(tx)
